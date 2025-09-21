@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
 body {
-   font-family: 'Poppins';
+  font-family: "Poppins";
+}
+
+.scrollbar {
+  height: 300px; /* or whatever height you need */
+  overflow-y: scroll; /* still scrollable */
+  -ms-overflow-style: none; /* IE/old Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+
+button {
+   cursor: pointer;
 }
