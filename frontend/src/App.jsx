@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { connectWS } from "./ws";
+import connectWs from "./ws";
 
 export default function App() {
   const timer = useRef(null);
@@ -12,52 +12,11 @@ export default function App() {
   const [text, setText] = useState("");
 
   useEffect(() => {
-    socket.current = connectWS();
-
-    socket.current.on("connect", () => {
-      socket.current.on("roomNotice", (userName) => {
-        console.log(`${userName} joined to group!`);
-      });
-
-      socket.current.on("chatMessage", (msg) => {
-        setMessages((prev) => [...prev, msg]);
-      });
-
-      socket.current.on("typing", (userName) => {
-        setTypers((prev) => {
-          const isExist = prev.find((typer) => typer === userName);
-          if (!isExist) return [...prev, userName];
-          return prev;
-        });
-      });
-
-      socket.current.on("stopTyping", (userName) => {
-        setTypers((prev) => prev.filter((typer) => typer !== userName));
-      });
-    });
-
-    return () => {
-      socket.current.off("roomNotice");
-      socket.current.off("chatMessage");
-      socket.current.off("typing");
-      socket.current.off("stopTyping");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (text) {
-      socket.current.emit("typing", userName);
-      clearTimeout(timer.current);
+    if (socket?.current) return;
+    else if (!socket?.current) {
+      socket.current = connectWs();
     }
-
-    timer.current = setTimeout(() => {
-      socket.current.emit("stopTyping", userName);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, [text, userName]);
+  }, [connectWs]);
 
   function formatTime(ts) {
     const d = new Date(ts);
@@ -105,7 +64,7 @@ export default function App() {
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 p-4 font-inter text-gray-100">
       {/* NAME POPUP */}
       {showNamePopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-40 backdrop-blur-md bg-black/50">
+        <div className="fixed inset-0 flex items-center justify-center z-40 backdrop-blur-md bg-black/50 px-3">
           <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-700 rounded-xl  max-w-md p-6">
             <h1 className="text-xl font-semibold text-white">
               Enter your name

@@ -1,5 +1,5 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-export function connectWS() {
-    return io('http://localhost:4600');
+export default function connectWs() {
+  return io("http://localhost:4500");
 }
