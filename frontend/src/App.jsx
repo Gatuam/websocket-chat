@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export default function App() {
   const socket = useRef(null);
   const bottomRef = useRef(null);
-
+  const timer = useRef(null);
   const [userName, setUserName] = useState("");
   const [showNamePopup, setShowNamePopup] = useState(true);
   const [inputName, setInputName] = useState("");
@@ -40,6 +40,9 @@ export default function App() {
           });
         }
       });
+      socket.current.on("stopTyping", (userName) => {
+        setTypers((pre) => pre.filter((name) => name !== userName));
+      });
     });
     return () => {};
   }, []);
@@ -51,7 +54,11 @@ export default function App() {
   useEffect(() => {
     if (text) {
       socket.current.emit("typing", userName);
+      clearTimeout(timer.current);
     }
+    timer.current = setTimeout(() => {
+      socket.current.emit("stopTyping", userName);
+    }, 3000);
     return () => {};
   }, [userName, text]);
 

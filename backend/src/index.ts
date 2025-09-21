@@ -38,6 +38,9 @@ io.on("connection", (socket) => {
   socket.on("typing", (userName) => {
     socket.to(Room).emit("typing", userName);
   });
+  socket.on("stopTyping", (userName) => {
+    socket.to(Room).emit("stopTyping", userName);
+  });
 });
 
 server.listen(4500, () => {
