@@ -18,7 +18,7 @@ app.get("/", (req: Request, res: Response) => {
 const Room = "group";
 const io = new Server(server, {
   cors: {
-    origin: "https://websocket-chat-delta.vercel.app/",
+    origin: "https://websocket-chat-delta.vercel.app",
     methods: ["GET", "POST"],
   },
 });
