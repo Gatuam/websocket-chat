@@ -44,7 +44,12 @@ export default function App() {
         setTypers((pre) => pre.filter((name) => name !== userName));
       });
     });
-    return () => {};
+    return () => {
+      socket.current.off("roomNotice");
+      socket.current.off("typing");
+      socket.current.off("chatNotice");
+      socket.current.off("stopTyping");
+    };
   }, []);
 
   useEffect(() => {
@@ -59,7 +64,9 @@ export default function App() {
     timer.current = setTimeout(() => {
       socket.current.emit("stopTyping", userName);
     }, 3000);
-    return () => {};
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [userName, text]);
 
   function formatTime(ts) {
