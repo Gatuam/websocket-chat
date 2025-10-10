@@ -43,6 +43,5 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(4500, () => {
-  console.log("server connected");
-});
+
+export default app;
